@@ -91,8 +91,8 @@ message JoinResponse {
     repeated NodeState nodes = 1;
 }
 
-// SwimServer service defines the gRPC interface for SWIM protocol
-service SwimServer {
+// SwimNode service defines the gRPC interface for SWIM protocol on a single node
+service SwimNode {
     // Ping checks if a node is alive
     rpc Ping(PingRequest) returns (AckResponse) {}
     
