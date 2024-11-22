@@ -70,9 +70,9 @@ message JoinRequest {
 
 // NodeStateType represents the types of node states
 enum NodeStateType {
-    alive = 1;
-    suspect = 2;
-    dead = 3;
+    alive = 0;
+    suspect = 1;
+    dead = 2;
 }
 
 // NodeState represents the state of a node
