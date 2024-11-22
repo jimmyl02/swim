@@ -1,0 +1,104 @@
+syntax = "proto3";
+
+package types;
+
+import "google/protobuf/timestamp.proto";
+
+// SuspectMessage is a message representing a suspected node
+message SuspectMessage {
+    uint32 incarnation = 1;
+    string node = 2;
+    string from = 3;
+}
+
+// AliveMessage is a message representing a node that is alive
+message AliveMessage {
+    uint32 incarnation = 1;
+    string node = 2;
+    bytes addr = 3;
+    uint32 port = 4;
+}
+
+// DeadMessage is a message representing a node that is dead
+message DeadMessage {
+    uint32 incarnation = 1;
+    string node = 2;
+    string from = 3;
+}
+
+// GossipMessage is one of the piggybacked messages
+message GossipMessage {
+    oneof message {
+        AliveMessage alive = 1;
+        DeadMessage dead = 2;
+        SuspectMessage suspect = 3;
+    }
+}
+
+// PingRequest is sent to check if a node is alive
+message PingRequest {
+    uint32 sequence_number = 1;
+    string node = 2;
+    bytes source_addr = 3;
+    uint32 source_port = 4;
+    string source_name = 5;
+}
+
+// IndirectPingRequest is sent to a third party to ping a potentially failed node
+message IndirectPingRequest {
+    uint32 sequence_number = 1;
+    string node = 2;
+    bytes source_addr = 3;
+    uint32 source_port = 4;
+    string source_name = 5;
+}
+
+// AckResponse is the response to a ping or indirect ping
+message AckResponse {
+    uint32 sequence_number = 1;
+    bool alive = 2;
+    uint64 sequence = 3;
+
+    // Piggyback gossip messages in response
+    repeated GossipMessage gossip = 4;
+}
+
+// JoinRequest is sent when a node wants to join the cluster
+message JoinRequest {
+    string node = 1;
+}
+
+// NodeStateType represents the types of node states
+enum NodeStateType {
+    alive = 1;
+    suspect = 2;
+    dead = 3;
+}
+
+// NodeState represents the state of a node
+message NodeState {
+    string name = 1;
+    bytes soruce_addr = 2;
+    uint32 source_port = 3;
+
+    uint32 sequence = 4;
+    NodeStateType state = 5;
+    google.protobuf.Timestamp state_change = 6;
+}
+
+// JoinResponse contains the current cluster state
+message JoinResponse {
+    repeated NodeState nodes = 1;
+}
+
+// SwimServer service defines the gRPC interface for SWIM protocol
+service SwimServer {
+    // Ping checks if a node is alive
+    rpc Ping(PingRequest) returns (AckResponse) {}
+    
+    // IndirectPing requests a third party to ping a node
+    rpc IndirectPing(IndirectPingRequest) returns (AckResponse) {}
+    
+    // Join attempts to join an existing cluster
+    rpc Join(JoinRequest) returns (JoinResponse) {}
+}

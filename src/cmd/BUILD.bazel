@@ -18,4 +18,5 @@ go_library(
     srcs = ["main.go"],
     importpath = "github.com/jimmyl02/swim/src/cmd",
     visibility = ["//visibility:private"],
+    deps = ["@com_github_spf13_pflag//:pflag"],
 )

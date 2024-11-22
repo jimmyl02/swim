@@ -1,5 +1,5 @@
 {
-    "go.toolsEnvVars": {
-        "GOPACKAGESDRIVER": "${workspaceFolder}/scripts/gopackagesdriver.sh"
-    }
+  "go.toolsEnvVars": {
+    "GOPACKAGESDRIVER": "${workspaceFolder}/scripts/gopackagesdriver.sh"
+  }
 }

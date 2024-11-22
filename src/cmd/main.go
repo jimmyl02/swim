@@ -1,7 +1,16 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+
+	flag "github.com/spf13/pflag"
+)
 
 func main() {
-	fmt.Println("test")
+	// setup flags
+	var bootstrapServers = flag.StringArray("bootstrap_server", []string{}, "bootstrap servers to connect to")
+	flag.Parse()
+
+	// run
+	fmt.Println("hello", bootstrapServers)
 }
