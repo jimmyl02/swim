@@ -2,7 +2,10 @@ load("@io_bazel_rules_go//go:def.bzl", "go_library")
 
 go_library(
     name = "swim",
-    srcs = ["swim.go"],
+    srcs = [
+        "state.go",
+        "swim.go",
+    ],
     importpath = "github.com/jimmyl02/swim/src/swim",
     visibility = ["//visibility:public"],
     deps = ["//types"],
